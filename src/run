@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+NEXUS=/srv/nexus/nexus-2.5.0-04/bin/nexus
+LOG=/srv/nexus/nexus-2.5.0-04/logs/wrapper.log
+
+export RUN_AS_USER=root
+
+stop() {
+    $NEXUS stop
+    kill $pid
+	exit
+}
+
+trap stop TERM
+$NEXUS start
+tail -f $LOG &
+pid=$!
+wait
